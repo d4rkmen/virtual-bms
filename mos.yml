@@ -1,0 +1,126 @@
+author: d4rkmen <darkmen@i.ua>
+description: Virtual BMS
+version: 1.4
+
+libs_version: ${mos.version}
+modules_version: ${mos.version}
+mongoose_os_version: ${mos.version}
+
+tags:
+  - c
+
+sources:
+  - src
+
+filesystem:
+  - fs
+
+includes:
+  - include
+
+config_schema:
+  - ["app", "o", { title: "APP settings" }]
+  - ["app.refresh_ms", "i", 1000, { title: "BMS data refresh period" }]
+  - ["app.bms_uart_no", "i", 2, { title: "BMS UART number" }]
+  - ["app.inv_uart_no", "i", 1, { title: "Inverter UART number" }]
+  - ["pins", "o", { title: "Pins layout" }]
+  - ["pins.led", "i", -1, { title: "LED GPIO pin" }]
+  - ["pins.button", "i", -1, { title: "Button GPIO pin" }]
+  - ["pins.button_hold_ms", "i", 5000, { title: "Button hold time for reset" }]
+  - ["pins.button_pull_up", "b", true, { title: "Button pull up or down" }]
+  # - ["pins.crx", "i", -1, { title: "CAN receive GPIO pin" }]
+  # - ["pins.ctx", "i", -1, { title: "CAN transmit GPIO pin" }]
+  - ["debug.stdout_uart", 0]
+  - ["debug.stderr_uart", 0]
+  - ["wifi.ap.enable", true]
+  - ["wifi.sta.enable", false]
+  - ["wifi.ap.ssid", "BMU-????"]
+  - ["wifi.ap.pass", "12345678"]
+  - ["rpc.default_out_channel_idle_close_timeout", 35]
+  - ["sys.wdt_timeout", 30]
+  - ["bms", "o", { title: "BMS settings", abstract: true }]
+  - ["bms.type", "i", -1, { title: "Type: -1 - unused, 0 - unknown; 1 - BYD PRO; 2 - JK-BMS" }]
+  - ["bms.name", "s", "BMS", { title: "Friendly name" }]
+  - ["bms.addr", "s", "0", { title: "MODBUS or BLE address" }]
+  - ["bms.serial", "s", "00000000000000000000", { title: "Battery serial number (20 chars)" }]
+  - ["bms.voltage", "f", 55.2, { title: "BMS float voltage" }]
+  - ["bms0", "bms", { title: "BMS0 settings" }]
+  - ["bms1", "bms", { title: "BMS1 settings" }]
+  - ["bms2", "bms", { title: "BMS2 settings" }]
+  - ["bms3", "bms", { title: "BMS3 settings" }]
+  - ["bms4", "bms", { title: "BMS4 settings" }]
+  - ["bms5", "bms", { title: "BMS5 settings" }]
+  - ["bms6", "bms", { title: "BMS6 settings" }]
+  - ["bms7", "bms", { title: "BMS7 settings" }]
+  - ["bms8", "bms", { title: "BMS8 settings" }]
+  - ["bms9", "bms", { title: "BMS9 settings" }]
+  - ["bms10", "bms", { title: "BMS10 settings" }]
+  - ["bms11", "bms", { title: "BMS11 settings" }]
+  - ["bms12", "bms", { title: "BMS12 settings" }]
+  - ["bms13", "bms", { title: "BMS13 settings" }]
+  - ["bms14", "bms", { title: "BMS14 settings" }]
+
+conds:
+  - when: build_vars.APP_MODE == "provisioned"
+    apply:
+      config_schema:
+        - ["wifi.ap.enable", false]
+        - ["wifi.sta.enable", true]
+        - ["wifi.sta.ssid", "WIFI_SSID"]
+        - ["wifi.sta.pass", "wifipass"]
+        - ["bms0.type", 1]
+        - ["bms0.name", "BYD PRO 2.5 #1"]
+        - ["bms0.addr", "1"]
+        - ["bms1.type", 1]
+        - ["bms1.name", "BYD PRO 2.5 #2"]
+        - ["bms1.addr", "2"]
+        - ["bms2.type", 1]
+        - ["bms2.name", "BYD PRO 2.5 #3"]
+        - ["bms2.addr", "3"]
+        - ["bms3.type", 1]
+        - ["bms3.name", "BYD PRO 2.5 #4"]
+        - ["bms3.addr", "4"]
+        - ["bms4.type", 2]
+        - ["bms4.name", "JK-BMS #1"]
+        - ["bms4.addr", "c8:8c:07:04:12:c5"]
+        - ["bms5.type", 2]
+        - ["bms5.name", "JK-BMS #2"]
+        - ["bms5.addr", "c8:8c:07:04:3f:e8"]
+        - ["bms6.type", 2]
+        - ["bms6.name", "JK-BMS #3"]
+        - ["bms6.addr", "c8:47:80:0d:d3:3d"]
+        - ["bms7.type", 2]
+        - ["bms7.name", "JK-BMS #4"]
+        - ["bms7.addr", "c8:8c:07:04:09:5e"]
+        # - ["debug.udp_log_addr", "192.168.88.123:1993"]
+  - when: mos.platform == "esp32"
+    apply:
+      config_schema:
+        - ["pins.led", 2]
+        - ["pins.button", 0]
+        - ["pins.crx", 4]
+        - ["pins.ctx", 5]
+
+libs:
+  - location: https://github.com/mongoose-os-libs/http-server
+  - location: https://github.com/mongoose-os-libs/wifi
+  - location: https://github.com/mongoose-os-libs/rpc-ws
+  - location: https://github.com/mongoose-os-libs/rpc-uart
+  - location: https://github.com/mongoose-os-libs/rpc-service-config
+  - location: https://github.com/d4rkmen/wifi-setup
+
+build_vars:
+  # Predefined WiFi network for development
+  # APP_MODE: provisioned
+  APP_MODE: not_provisioned
+ MGOS_ROOT_FS_TYPE: LFS
+  MGOS_ROOT_FS_SIZE: 458752
+  ESP_IDF_EXTRA_COMPONENTS: "${build_vars.ESP_IDF_EXTRA_COMPONENTS} bt"
+  ESP_IDF_SDKCONFIG_OPTS: >
+    ${build_vars.ESP_IDF_SDKCONFIG_OPTS}
+      CONFIG_BT_ENABLED=y
+      CONFIG_FREERTOS_UNICORE=y
+      CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
+
+## Used by the mos tool to catch mos binaries incompatible with this file format
+manifest_version: 2020-08-02
