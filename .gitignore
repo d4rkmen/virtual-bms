@@ -1,0 +1,9 @@
+deps/
+build/
+fs/
+.vscode/
+.old/
+vbms-web-ui/.old/
+vbms-web-ui/build/
+vbms-web-ui/dist/
+vbms-web-ui/node_modules/
