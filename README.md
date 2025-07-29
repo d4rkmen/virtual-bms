@@ -16,10 +16,31 @@ A versatile BMS proxy and aggregation system built on Mongoose OS for ESP32. Thi
 - **RPC API**: HTTP, WebSocket, and MQTT RPC endpoints
 - **Real-time Data**: Live monitoring with configurable refresh intervals
 
+## Preview
+
+### Main Dashboard
+
+The web interface provides a comprehensive view of all connected BMS units with real-time monitoring capabilities:
+
+![Main Dashboard](docs/vbms_main.png)
+
+### Settings Configuration
+
+Easy-to-use settings interface for configuring BMS units, communication parameters, and system preferences:
+
+![Settings Interface](docs/vbms_settings.png)
+
+### DEYE Inverter Integration
+
+Virtual BMS seamlessly integrates with DEYE inverters, providing battery status through the inverter's communication protocol:
+
+![DEYE Integration](docs/deye_libms.png)
+
 ## Hardware Requirements
 
 - ESP32 development board
-- RS485 transceiver module (for wired BMS connections)
+- RS485 transceiver module (to connect VBMS to DEYE inverter)
+- RS485 transceiver module (to connect VBMS to BMS units BYD B-Box Pro)
 - Optional: CAN transceiver (for future CAN bus support)
 
 ## Installation
@@ -156,20 +177,6 @@ Access the web dashboard at `http://[ESP32_IP_ADDRESS]` to:
 - View system status and connectivity
 - Configure BMS settings
 - Manage BLE device connections
-
-## Development and Testing
-
-### Emulator Scripts
-
-The project includes Python emulator scripts for testing:
-
-- **BMS Emulator**: `python bms_emu.py /dev/ttyUSB0`
-- **DEYE Inverter Emulator**: `python deye_485_emu.py /dev/ttyUSB1`
-- **M-NET Emulator**: `python mnet_emu.py /dev/ttyUSB2`
-
-### BLE Testing
-
-Use `bleprph_test.py` to test Bluetooth LE peripheral functionality.
 
 ## Configuration Parameters
 
