@@ -23,6 +23,9 @@ config_schema:
   - ["app.refresh_ms", "i", 1000, { title: "BMS data refresh period" }]
   - ["app.bms_uart_no", "i", 2, { title: "BMS UART number" }]
   - ["app.inv_uart_no", "i", 1, { title: "Inverter UART number" }]
+  - ["app.series_enabled", "b", true, { title: "Combine five JK BLE batteries for RS485" }]
+  - ["app.series_address", "i", 0, { title: "Virtual BMS RS485 address (0-14)" }]
+  - ["app.series_timeout_s", "i", 30, { title: "Maximum age of JK cell telemetry in seconds" }]
   - ["pins", "o", { title: "Pins layout" }]
   - ["pins.led", "i", -1, { title: "LED GPIO pin" }]
   - ["pins.button", "i", -1, { title: "Button GPIO pin" }]
@@ -113,12 +116,13 @@ build_vars:
   # Predefined WiFi network for development
   # APP_MODE: provisioned
   APP_MODE: not_provisioned
- MGOS_ROOT_FS_TYPE: LFS
+  MGOS_ROOT_FS_TYPE: LFS
   MGOS_ROOT_FS_SIZE: 458752
   ESP_IDF_EXTRA_COMPONENTS: "${build_vars.ESP_IDF_EXTRA_COMPONENTS} bt"
   ESP_IDF_SDKCONFIG_OPTS: >
     ${build_vars.ESP_IDF_SDKCONFIG_OPTS}
       CONFIG_BT_ENABLED=y
+      CONFIG_BT_ACL_CONNECTIONS=5
       CONFIG_FREERTOS_UNICORE=y
       CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
 
