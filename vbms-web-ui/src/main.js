@@ -59,12 +59,12 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$config = Object.freeze(conf);
 
-let locale = "en";
+let locale = "ua";
 try {
-  locale = JSON.parse(localStorage.getItem("locale")) || "en";
+  locale = JSON.parse(localStorage.getItem("locale")) || "ua";
   //
 } catch (e) {}
-if (["en", "ua"].indexOf(locale) === -1) locale = "en";
+if (["en", "ua"].indexOf(locale) === -1) locale = "ua";
 console.log("LOCALE", locale);
 
 /**
