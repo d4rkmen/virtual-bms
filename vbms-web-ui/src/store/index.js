@@ -30,6 +30,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    CLEAR_DATA(state) {
+      state.bms.forEach(unit => { unit.data = null; });
+    },
     SET_DATA(state, resp) {
       //resp is array of bms data
       if (
@@ -42,8 +45,9 @@ export default new Vuex.Store({
         bms.data = null;
       });
       resp.bms.forEach((data) => {
-        if (state.bms[data.addr] !== undefined) {
-          state.bms[data.addr].data = data;
+        const index = Number(data.addr);
+        if (Number.isInteger(index) && state.bms[index] !== undefined) {
+          state.bms[index].data = data;
         }
       });
     },
